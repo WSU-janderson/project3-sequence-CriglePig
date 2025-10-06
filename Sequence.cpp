@@ -27,9 +27,9 @@ Sequence::Sequence(size_t sz) {
     }
 }
 
-// Creates a (deep) copy of sequence s
-Sequence::Sequence(const Sequence& s) {
-    SequenceNode* current = s.head;
+// Creates a (deep) copy of sequence other
+Sequence::Sequence(const Sequence& other) {
+    SequenceNode* current = other.head;
 
     while (current) {
         push_back(current->item);
@@ -44,9 +44,22 @@ Sequence::~Sequence() {
 }
 
 // The current sequence is released and replaced by a (deep) copy of sequence
-// s. A reference to the copied sequence is returned (return *this;).
-Sequence& Sequence::operator=(const Sequence& s) {
+// other. A reference to the copied sequence is returned (return *this;).
+Sequence& Sequence::operator=(const Sequence& other) {
+    head = other.head;
+    tail = other.tail;
+    nodeCount = other.nodeCount;
 
+    clear();
+
+    SequenceNode* current = other.head;
+
+    while (current) {
+        push_back(current->item);
+        current = current->next;
+    }
+
+    return *this;
 }
 
 // The position satisfies ( position >= 0 && position <= last_index() ).

@@ -27,11 +27,11 @@ class Sequence {
 
     Sequence(size_t sz);
 
-    Sequence(const Sequence &s);
+    Sequence(const Sequence &other);
 
     ~Sequence();
 
-    Sequence &operator=(const Sequence &s);
+    Sequence &operator=(const Sequence &other);
 
     std::string &operator[](size_t position);
 
