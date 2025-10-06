@@ -21,6 +21,10 @@ class SequenceNode {
 class Sequence {
     private:
     public:
+    SequenceNode* head;
+    SequenceNode* tail;
+    size_t nodeCount;
+
     Sequence(size_t sz);
 
     Sequence(const Sequence &s);
