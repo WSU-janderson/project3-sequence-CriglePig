@@ -12,7 +12,7 @@ Sequence::Sequence(size_t sz) {
     nodeCount = 0;
 
     if (sz > 0) {
-        SequenceNode* newNode = new SequenceNode();
+        auto* newNode = new SequenceNode();
         head = newNode;
         tail = newNode;
         nodeCount = 1;
@@ -29,12 +29,19 @@ Sequence::Sequence(size_t sz) {
 
 // Creates a (deep) copy of sequence s
 Sequence::Sequence(const Sequence& s) {
+    SequenceNode* current = s.head;
 
+    while (current) {
+        push_back(current->item);
+        current = current->next;
+    }
 }
 
 // Destroys all items in the sequence and release the memory
 // associated with the sequence
-Sequence::~Sequence() {}
+Sequence::~Sequence() {
+    clear();
+}
 
 // The current sequence is released and replaced by a (deep) copy of sequence
 // s. A reference to the copied sequence is returned (return *this;).
@@ -105,7 +112,15 @@ size_t Sequence::size() const {
 // sequence is released, resetting the sequence to an empty state that can have
 // items re-inserted.
 void Sequence::clear() {
+    SequenceNode* current = head;
 
+    while (current != nullptr) {
+        SequenceNode* temp = current->next;
+        delete current;
+        current = temp;
+    }
+
+    head = nullptr;
 }
 
 // The item at position is removed from the sequence, and the memory
