@@ -118,16 +118,16 @@ bool Sequence::empty() const {
 
 // Return the number of elements in the sequence.
 size_t Sequence::size() const {
-
+    return nodeCount;
 }
 
 // All items in the sequence are deleted and the memory associated with the
 // sequence is released, resetting the sequence to an empty state that can have
 // items re-inserted.
 void Sequence::clear() {
-    SequenceNode* current = head;
+    const SequenceNode* current = head;
 
-    while (current != nullptr) {
+    while (current) {
         SequenceNode* temp = current->next;
         delete current;
         current = temp;
@@ -139,16 +139,61 @@ void Sequence::clear() {
 // The item at position is removed from the sequence, and the memory
 // is released. If called with an invalid position throws an exception.
 void Sequence::erase(size_t position) {
-    if () {
+    // if position is invalid, throw exception
+    if (position >= size() || position < 0 ) {
         throw exception();
     }
+
+    SequenceNode* temp; // temporary node
+
+    // if position is head, erase head and return
+    if (position == 0) {
+        temp = head;
+        delete head;
+        head = temp->next;
+        head->prev = nullptr;
+        nodeCount -= 1;
+        return;
+    }
+
+    // if position is tail, erase tail and return
+    if (position == size() - 1) {
+        temp = tail;
+        delete tail;
+        tail = temp->prev;
+        tail->next = nullptr;
+        nodeCount -= 1;
+        return;
+    }
+
+    // setup local variables for loop to find node at position
+    SequenceNode* current = head;
+    int currPosition = 0;
+
+    // loop until current equals the node at position
+    while (currPosition < position) {
+        current = current->next;
+        currPosition += 1;
+    }
+
+    // current's previous and next nodes
+    SequenceNode* currentPrev = current->prev;
+    SequenceNode* currentNext = current->next;
+
+    // erase current
+    delete current;
+    nodeCount -= 1;
+
+    // connect currentPrev and currentNext with pointers
+    currentPrev->next = currentNext;
+    currentNext->prev = currentPrev;
 }
 
 // The items in the sequence at ( position ... (position + count - 1) ) are
 // deleted and their memory released. If called with invalid position and/or
 // count throws an exception.
 void Sequence::erase(size_t position, size_t count) {
-    if () {
+    if (position >= size() || position < 0 ) {
         throw exception();
     }
 }
