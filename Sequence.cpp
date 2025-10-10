@@ -125,7 +125,7 @@ size_t Sequence::size() const {
 // sequence is released, resetting the sequence to an empty state that can have
 // items re-inserted.
 void Sequence::clear() {
-    const SequenceNode* current = head;
+    SequenceNode* current = head;
 
     while (current) {
         SequenceNode* temp = current->next;
@@ -140,7 +140,7 @@ void Sequence::clear() {
 // is released. If called with an invalid position throws an exception.
 void Sequence::erase(size_t position) {
     // if position is invalid, throw exception
-    if (position >= size() || position < 0 ) {
+    if (position >= size()) {
         throw exception();
     }
 
@@ -150,9 +150,9 @@ void Sequence::erase(size_t position) {
     if (position == 0) {
         temp = head;
         delete head;
+        nodeCount -= 1;
         head = temp->next;
         head->prev = nullptr;
-        nodeCount -= 1;
         return;
     }
 
@@ -160,9 +160,9 @@ void Sequence::erase(size_t position) {
     if (position == size() - 1) {
         temp = tail;
         delete tail;
+        nodeCount -= 1;
         tail = temp->prev;
         tail->next = nullptr;
-        nodeCount -= 1;
         return;
     }
 
@@ -193,7 +193,45 @@ void Sequence::erase(size_t position) {
 // deleted and their memory released. If called with invalid position and/or
 // count throws an exception.
 void Sequence::erase(size_t position, size_t count) {
-    if (position >= size() || position < 0 ) {
+    if (position >= size() || count == 0 || position + count > size()) {
         throw exception();
+    }
+
+    // get first node to be deleted
+    SequenceNode* first = head;
+    for (size_t i = 0; i < position; ++i) {
+        first = first->next;
+    }
+
+    // get last node to be deleted
+    SequenceNode* last = first;
+    for (size_t i = 1; i < count; ++i) {
+        last = last->next;
+    }
+
+    // initialize the nodes before and after the first and last nodes to be deleted
+    SequenceNode* before = first->prev;
+    SequenceNode* after = last->next;
+
+    // delete nodes between first and last
+    SequenceNode* current = first;
+    while (current != after) {
+        SequenceNode* nextNode = current->next;
+        delete current;
+        nodeCount--;
+        current = nextNode;
+    }
+
+    // reconnect adjacent nodes
+    if (before) {
+        before->next = after;
+    } else {
+        head = after;  // deletion from head
+    }
+
+    if (after) {
+        after->prev = before;
+    } else {
+        tail = before;  // deletion up to tail
     }
 }
