@@ -12,13 +12,13 @@ Sequence::Sequence(size_t sz) {
     nodeCount = 0;
 
     if (sz > 0) {
-        auto* newNode = new SequenceNode();
+        auto* newNode = new SequenceNode("");
         head = newNode;
         tail = newNode;
         nodeCount = 1;
 
         while (nodeCount < sz) {
-            newNode = new SequenceNode();
+            newNode = new SequenceNode("");
             tail->next = newNode;
             newNode->prev = tail;
             tail = newNode;
@@ -107,8 +107,8 @@ std::string& Sequence::operator[](size_t position) {
 }
 
 // The value of item is appended to the sequence.
-void Sequence::push_back(std::string item) {
-    SequenceNode* newNode = new SequenceNode();
+void Sequence::push_back(const std::string &item) {
+    auto* newNode = new SequenceNode();
 
     newNode->item = item;
     newNode->next = nullptr;
@@ -148,14 +148,14 @@ void Sequence::pop_back() {
 
 // The position satisfies ( position >= 0 && position <= last_index() ). The
 // value of item is inserted at position and the size of sequence is increased
-// by one. Throws an exceptionif the position is outside the bounds of the
+// by one. Throws an exception if the position is outside the bounds of the
 // sequence
-void Sequence::insert(size_t position, std::string item) {
+void Sequence::insert(const size_t position, const std::string &item) {
     if (position > size()) {
         throw exception();
     }
 
-    SequenceNode* newNode = new SequenceNode();
+    auto* newNode = new SequenceNode();
     newNode->item = item;
 
     if (size() == 0) { // empty list

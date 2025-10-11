@@ -46,5 +46,8 @@ int main() {
     s1 = s2;
     cout << s1 << endl;
 
+    s1[0] = "Howdy";
+    cout << s1 << endl;
+
     return 0;
 }

@@ -1,4 +1,6 @@
+#pragma once
 #include <iostream>
+#include <utility>
 
 class SequenceNode {
     public: // to make it easier, we can make the data members public so we don't need getters and setters
@@ -11,7 +13,7 @@ class SequenceNode {
 
     /// parameterized constructor, next and prev are set to nullptr and the
     /// node's element is set to the given value
-    SequenceNode(std::string item) : next(nullptr), prev(nullptr), item(item) {}
+    explicit SequenceNode(std::string item) : next(nullptr), prev(nullptr), item(std::move(item)) {}
 };
 
 class Sequence {
@@ -21,7 +23,7 @@ class Sequence {
     SequenceNode* tail;
     size_t nodeCount;
 
-    Sequence(size_t sz);
+    explicit Sequence(size_t sz);
 
     Sequence(const Sequence& other);
 
@@ -38,19 +40,19 @@ class Sequence {
 
     std::string &operator[](size_t position);
 
-    void push_back(std::string item);
+    void push_back(const std::string &item);
 
     void pop_back();
 
-    void insert(size_t position, std::string item);
+    void insert(size_t position, const std::string &item);
 
-    std::string front() const;
+    [[nodiscard]] std::string front() const;
 
-    std::string back() const;
+    [[nodiscard]] std::string back() const;
 
-    bool empty() const;
+    [[nodiscard]] bool empty() const;
 
-    size_t size() const;
+    [[nodiscard]] size_t size() const;
 
     void clear();
 
