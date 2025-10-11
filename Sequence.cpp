@@ -72,9 +72,23 @@ std::string& Sequence::operator[](size_t position) {
     }
 }
 
-// The value of item is append to the sequence.
+// The value of item is appended to the sequence.
 void Sequence::push_back(std::string item) {
+    SequenceNode* newNode = new SequenceNode();
 
+    newNode->item = item;
+    newNode->next = nullptr;
+    newNode->prev = tail;
+
+    if (head == nullptr) { // List is empty
+        head = newNode;
+        tail = newNode;
+    } else { // Link the new node at the end
+        tail->next = newNode;
+        tail = newNode;
+    }
+
+    nodeCount++;
 }
 
 // The item at the end of the sequence is deleted and size of the sequence is
