@@ -80,10 +80,10 @@ void Sequence::push_back(std::string item) {
     newNode->next = nullptr;
     newNode->prev = tail;
 
-    if (head == nullptr) { // List is empty
+    if (head == nullptr) { // list is empty
         head = newNode;
         tail = newNode;
-    } else { // Link the new node at the end
+    } else { // link the new node at the end
         tail->next = newNode;
         tail = newNode;
     }
@@ -94,9 +94,22 @@ void Sequence::push_back(std::string item) {
 // The item at the end of the sequence is deleted and size of the sequence is
 // reduced by one. If sequence was empty, throws an exception
 void Sequence::pop_back() {
-    if () {
+    if (empty()) {
         throw exception();
     }
+
+    SequenceNode* temp = tail;
+
+    if (head == tail) { // only one node in the list
+        head = nullptr;
+        tail = nullptr;
+    } else { // more than one node
+        tail = tail->prev;
+        tail->next = nullptr;
+    }
+
+    delete temp;
+    nodeCount--;
 }
 
 // The position satisfies ( position >= 0 && position <= last_index() ). The
