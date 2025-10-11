@@ -134,6 +134,8 @@ void Sequence::clear() {
     }
 
     head = nullptr;
+    tail = nullptr;
+    nodeCount = 0;
 }
 
 // The item at position is removed from the sequence, and the memory
@@ -149,44 +151,58 @@ void Sequence::erase(size_t position) {
     // if position is head, erase head and return
     if (position == 0) {
         temp = head;
-        delete head;
-        nodeCount -= 1;
-        head = temp->next;
-        head->prev = nullptr;
+        head = head->next;
+
+        delete temp;
+        nodeCount--;
+
+        if (head) {
+            head->prev = nullptr;
+        } else {
+            tail = nullptr;
+        }
+
         return;
     }
 
     // if position is tail, erase tail and return
     if (position == size() - 1) {
         temp = tail;
-        delete tail;
-        nodeCount -= 1;
-        tail = temp->prev;
-        tail->next = nullptr;
+        tail = tail->prev;
+
+        delete temp;
+        nodeCount--;
+
+        if (tail) {
+            tail->next = nullptr;
+        } else {
+            head = nullptr; // now empty list
+        }
+
         return;
     }
 
     // setup local variables for loop to find node at position
     SequenceNode* current = head;
-    int currPosition = 0;
+    size_t currPosition = 0;
 
     // loop until current equals the node at position
     while (currPosition < position) {
         current = current->next;
-        currPosition += 1;
+        currPosition++;
     }
 
-    // current's previous and next nodes
-    SequenceNode* currentPrev = current->prev;
-    SequenceNode* currentNext = current->next;
+    // the nodes before and after the deleted node
+    SequenceNode* before = current->prev;
+    SequenceNode* after = current->next;
+
+    // connect the before and after nodes
+    before->next = after;
+    after->prev = before;
 
     // erase current
     delete current;
-    nodeCount -= 1;
-
-    // connect currentPrev and currentNext with pointers
-    currentPrev->next = currentNext;
-    currentNext->prev = currentPrev;
+    nodeCount--;
 }
 
 // The items in the sequence at ( position ... (position + count - 1) ) are
