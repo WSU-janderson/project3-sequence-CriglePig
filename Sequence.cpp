@@ -43,6 +43,30 @@ Sequence::~Sequence() {
     clear();
 }
 
+void Sequence::printSequence(ostream& os) const {
+    SequenceNode* current = head;
+
+    os << "<";
+
+    // loop until current equals the node at position
+    while (current != nullptr) {
+        os << current->item;
+
+        if (current->next != nullptr) {
+            os << ", ";
+        }
+
+        current = current->next;
+    }
+
+    os << ">";
+}
+
+ostream& operator<<(ostream& os, const Sequence& sequence) {
+    sequence.printSequence(os);
+    return os;
+}
+
 // The current sequence is released and replaced by a (deep) copy of sequence
 // other. A reference to the copied sequence is returned (return *this;).
 Sequence& Sequence::operator=(const Sequence& other) {
@@ -72,11 +96,10 @@ std::string& Sequence::operator[](size_t position) {
     }
 
     SequenceNode* current = head;
-    size_t currPosition = 0;
 
-    while (currPosition < position) {
+    // loop until current equals the node at position
+    for (size_t currPos = 0; currPos < position; currPos++) {
         current = current->next;
-        currPosition++;
     }
 
     return current->item;
@@ -151,11 +174,10 @@ void Sequence::insert(size_t position, std::string item) {
         tail = newNode;
     } else { // insert in the middle
         SequenceNode* current = head;
-        size_t currPosition = 0;
 
-        while (currPosition < position) {
+        // loop until current equals the node at position
+        for (size_t currPos = 0; currPos < position; currPos++) {
             current = current->next;
-            currPosition++;
         }
 
         SequenceNode* before = current->prev;
@@ -264,12 +286,10 @@ void Sequence::erase(size_t position) {
 
     // setup local variables for loop to find node at position
     SequenceNode* current = head;
-    size_t currPosition = 0;
 
     // loop until current equals the node at position
-    while (currPosition < position) {
+    for (size_t currPos = 0; currPos < position; currPos++) {
         current = current->next;
-        currPosition++;
     }
 
     // the nodes before and after the deleted node

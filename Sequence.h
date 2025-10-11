@@ -7,15 +7,11 @@ class SequenceNode {
     std::string item; // the element being stored in the node
 
     //default constructor, ensure next and prev are nullptr
-    SequenceNode() : next(nullptr), prev(nullptr) {
-
-    }
+    SequenceNode() : next(nullptr), prev(nullptr) {}
 
     /// parameterized constructor, next and prev are set to nullptr and the
     /// node's element is set to the given value
-    SequenceNode(std::string item) : next(nullptr), prev(nullptr), item(item) {
-
-    }
+    SequenceNode(std::string item) : next(nullptr), prev(nullptr), item(item) {}
 };
 
 class Sequence {
@@ -27,11 +23,18 @@ class Sequence {
 
     Sequence(size_t sz);
 
-    Sequence(const Sequence &other);
+    Sequence(const Sequence& other);
 
     ~Sequence();
 
-    Sequence &operator=(const Sequence &other);
+    void printSequence(std::ostream& os) const;
+
+    // Outputs all elements (ex: <4, 8, 15, 16, 23, 42>) as a string to the output
+    // stream. This is *not* a method of the Sequence class, but instead it is a
+    // friend function
+    friend std::ostream& operator<<(std::ostream& os, const Sequence& sequence);
+
+    Sequence &operator=(const Sequence& other);
 
     std::string &operator[](size_t position);
 
