@@ -70,11 +70,12 @@ ostream& operator<<(ostream& os, const Sequence& sequence) {
 // The current sequence is released and replaced by a (deep) copy of sequence
 // other. A reference to the copied sequence is returned (return *this;).
 Sequence& Sequence::operator=(const Sequence& other) {
-    head = other.head;
-    tail = other.tail;
-    nodeCount = other.nodeCount;
+    // self-assignment guard
+    if (this == &other) {
+        return *this;
+    }
 
-    clear();
+    clear(); // delete current nodes
 
     SequenceNode* current = other.head;
 
