@@ -98,22 +98,26 @@ void Sequence::insert(size_t position, std::string item) {
 // Returns the first element in the sequence. If the sequence is empty, throw an
 // exception.
 std::string Sequence::front() const {
-    if () {
+    if (empty()) {
         throw exception();
     }
+
+    return head->item;
 }
 
 // Return the last element in the sequence. If the sequence is empty, throw an
 // exception.
 std::string Sequence::back() const {
-    if () {
+    if (empty()) {
         throw exception();
     }
+
+    return tail->item;
 }
 
 // Return true if the sequence has no elements, otherwise false.
 bool Sequence::empty() const {
-
+    return nodeCount == 0;
 }
 
 // Return the number of elements in the sequence.
