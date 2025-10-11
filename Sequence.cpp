@@ -1,11 +1,25 @@
+/* Filename: Sequence.cpp
+ * Author: Crystal Daniel
+ * Project: Project 3 - Sequence
+ * Due Date: 10/13/2025
+ * Program Description: This program implements a doubly linked list data structure called Sequence, which stores
+ * a series of strings in sequential order. The Sequence supports operations for insertion, deletion, traversal,
+ * element access, and deep copying. It provides custom operator overloads and exception handling for invalid
+ * access or modification attempts.
+ */
 #include "Sequence.h"
 #include <cstdlib>
 #include <iostream>
 
 using namespace std;
 
-// Creates an empty sequence (numElts == 0) or a sequence of numElts items
-// indexed from 0 ... (numElts - 1).
+/* Purpose: Constructs a sequence with sz items.
+ * Parameters:
+ *    sz – number of elements to initially create (default empty if 0)
+ * Behavior:
+ *    Creates a doubly linked list of sz empty strings.
+ *    head points to the first node, tail points to the last node.
+ */
 Sequence::Sequence(size_t sz) {
     head = nullptr;
     tail = nullptr;
@@ -27,7 +41,12 @@ Sequence::Sequence(size_t sz) {
     }
 }
 
-// Creates a (deep) copy of sequence other
+/* Purpose: Copy constructor.
+ * Parameters:
+ *    other – another Sequence to copy
+ * Behavior:
+ *    Performs a deep copy of the other sequence, duplicating all nodes.
+ */
 Sequence::Sequence(const Sequence& other) : head(nullptr), tail(nullptr), nodeCount(0) {
     SequenceNode* current = other.head;
 
@@ -37,12 +56,20 @@ Sequence::Sequence(const Sequence& other) : head(nullptr), tail(nullptr), nodeCo
     }
 }
 
-// Destroys all items in the sequence and release the memory
-// associated with the sequence
+/* Purpose: Destructor.
+ * Behavior:
+ *    Deletes all nodes in the sequence and frees memory.
+ */
 Sequence::~Sequence() {
     clear();
 }
 
+/* Purpose: Prints the sequence to an output stream.
+ * Parameters:
+ *    os – output stream (e.g., cout)
+ * Behavior:
+ *    Outputs items in order, formatted as <item1, item2, ..., itemN>.
+ */
 void Sequence::printSequence(ostream& os) const {
     SequenceNode* current = head;
 
@@ -62,13 +89,27 @@ void Sequence::printSequence(ostream& os) const {
     os << ">";
 }
 
+/* Purpose: Stream insertion operator.
+ * Parameters:
+ *    os – output stream
+ *    sequence – the Sequence to print
+ * Returns:
+ *    Reference to the output stream
+ */
 ostream& operator<<(ostream& os, const Sequence& sequence) {
     sequence.printSequence(os);
     return os;
 }
 
-// The current sequence is released and replaced by a (deep) copy of sequence
-// other. A reference to the copied sequence is returned (return *this;).
+/* Purpose: Assignment operator.
+ * Parameters:
+ *    other – Sequence to copy from
+ * Returns:
+ *    Reference to this sequence
+ * Behavior:
+ *    Clears current sequence and copies all nodes from other.
+ *    Handles self-assignment correctly.
+ */
 Sequence& Sequence::operator=(const Sequence& other) {
     // self-assignment guard
     if (this == &other) {
@@ -87,10 +128,14 @@ Sequence& Sequence::operator=(const Sequence& other) {
     return *this;
 }
 
-// The position satisfies ( position >= 0 && position <= last_index() ).
-// The return value is a reference to the item at index position in the
-// sequence. Throws an exception if the position is outside the bounds
-// of the sequence
+/* Purpose: Access item at a given position.
+ * Parameters:
+ *    position – index of the desired element
+ * Returns:
+ *    Reference to the string at position
+ * Throws:
+ *    exception if position is out of bounds
+ */
 std::string& Sequence::operator[](size_t position) {
     if (position >= size()) {
         throw exception();
@@ -106,7 +151,10 @@ std::string& Sequence::operator[](size_t position) {
     return current->item;
 }
 
-// The value of item is appended to the sequence.
+/* Purpose: Append an item to the end of the sequence.
+ * Parameters:
+ *    item – string to add
+ */
 void Sequence::push_back(const std::string &item) {
     auto* newNode = new SequenceNode();
 
@@ -125,8 +173,10 @@ void Sequence::push_back(const std::string &item) {
     nodeCount++;
 }
 
-// The item at the end of the sequence is deleted and size of the sequence is
-// reduced by one. If sequence was empty, throws an exception
+/* Purpose: Remove the last item from the sequence.
+ * Throws:
+ *    exception if the sequence is empty
+ */
 void Sequence::pop_back() {
     if (empty()) {
         throw exception();
@@ -146,10 +196,13 @@ void Sequence::pop_back() {
     nodeCount--;
 }
 
-// The position satisfies ( position >= 0 && position <= last_index() ). The
-// value of item is inserted at position and the size of sequence is increased
-// by one. Throws an exception if the position is outside the bounds of the
-// sequence
+/* Purpose: Insert an item at a specific position.
+ * Parameters:
+ *    position – index to insert at
+ *    item – string to insert
+ * Throws:
+ *    exception if position is invalid
+ */
 void Sequence::insert(const size_t position, const std::string &item) {
     if (position > size()) {
         throw exception();
@@ -194,8 +247,10 @@ void Sequence::insert(const size_t position, const std::string &item) {
     nodeCount++;
 }
 
-// Returns the first element in the sequence. If the sequence is empty, throw an
-// exception.
+/* Purpose: Return the first element in the sequence.
+ * Throws:
+ *    exception if the sequence is empty
+ */
 std::string Sequence::front() const {
     if (empty()) {
         throw exception();
@@ -204,8 +259,10 @@ std::string Sequence::front() const {
     return head->item;
 }
 
-// Return the last element in the sequence. If the sequence is empty, throw an
-// exception.
+/* Purpose: Return the last element in the sequence.
+ * Throws:
+ *    exception if the sequence is empty
+ */
 std::string Sequence::back() const {
     if (empty()) {
         throw exception();
@@ -214,19 +271,26 @@ std::string Sequence::back() const {
     return tail->item;
 }
 
-// Return true if the sequence has no elements, otherwise false.
+/* Purpose: Check if the sequence has no elements.
+ * Returns:
+ *    true if sequence is empty, false otherwise
+ */
 bool Sequence::empty() const {
     return nodeCount == 0;
 }
 
-// Return the number of elements in the sequence.
+/* Purpose: Return the number of elements in the sequence.
+ * Returns:
+ *    the size of the sequence
+ */
 size_t Sequence::size() const {
     return nodeCount;
 }
 
-// All items in the sequence are deleted and the memory associated with the
-// sequence is released, resetting the sequence to an empty state that can have
-// items re-inserted.
+/* Purpose: Remove all elements from the sequence.
+ * Behavior:
+ *    Frees all node memory and resets the sequence to empty.
+ */
 void Sequence::clear() {
     SequenceNode* current = head;
 
@@ -241,8 +305,12 @@ void Sequence::clear() {
     nodeCount = 0;
 }
 
-// The item at position is removed from the sequence, and the memory
-// is released. If called with an invalid position throws an exception.
+/* Purpose: Remove a single element at a given position.
+ * Parameters:
+ *    position – index of element to remove
+ * Throws:
+ *    exception if position is invalid
+ */
 void Sequence::erase(size_t position) {
     // if position is invalid, throw exception
     if (position >= size()) {
@@ -306,9 +374,13 @@ void Sequence::erase(size_t position) {
     nodeCount--;
 }
 
-// The items in the sequence at ( position ... (position + count - 1) ) are
-// deleted and their memory released. If called with invalid position and/or
-// count throws an exception.
+/* Purpose: Remove a range of elements.
+ * Parameters:
+ *    position – starting index
+ *    count – number of elements to remove
+ * Throws:
+ *    exception if position/count is invalid
+ */
 void Sequence::erase(size_t position, size_t count) {
     if (position >= size() || count == 0 || position + count > size()) {
         throw exception();
