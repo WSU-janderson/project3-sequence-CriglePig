@@ -67,9 +67,19 @@ Sequence& Sequence::operator=(const Sequence& other) {
 // sequence. Throws an exception if the position is outside the bounds
 // of the sequence
 std::string& Sequence::operator[](size_t position) {
-    if () {
+    if (position >= size()) {
         throw exception();
     }
+
+    SequenceNode* current = head;
+    size_t currPosition = 0;
+
+    while (currPosition < position) {
+        current = current->next;
+        currPosition++;
+    }
+
+    return current->item;
 }
 
 // The value of item is appended to the sequence.
