@@ -117,9 +117,48 @@ void Sequence::pop_back() {
 // by one. Throws an exceptionif the position is outside the bounds of the
 // sequence
 void Sequence::insert(size_t position, std::string item) {
-    if () {
+    if (position > size()) {
         throw exception();
     }
+
+    SequenceNode* newNode = new SequenceNode();
+    newNode->item = item;
+
+    if (size() == 0) { // empty list
+        newNode->prev = nullptr;
+        newNode->next = nullptr;
+        head = newNode;
+        tail = newNode;
+    } else if (position == 0) { // insert at the front
+        newNode->prev = nullptr;
+        newNode->next = head;
+        head->prev = newNode;
+        head = newNode;
+    } else if (position == size()) { // insert at the end
+        newNode->next = nullptr;
+        newNode->prev = tail;
+        tail->next = newNode;
+        tail = newNode;
+    } else { // insert in the middle
+        SequenceNode* current = head;
+        size_t currPosition = 0;
+
+        while (currPosition < position) {
+            current = current->next;
+            currPosition++;
+        }
+
+        SequenceNode* before = current->prev;
+        SequenceNode* after = current;
+
+        newNode->next = after;
+        newNode->prev = before;
+
+        before->next = newNode;
+        after->prev = newNode;
+    }
+
+    nodeCount++;
 }
 
 // Returns the first element in the sequence. If the sequence is empty, throw an
