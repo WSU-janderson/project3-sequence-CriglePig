@@ -28,7 +28,7 @@ Sequence::Sequence(size_t sz) {
 }
 
 // Creates a (deep) copy of sequence other
-Sequence::Sequence(const Sequence& other) {
+Sequence::Sequence(const Sequence& other) : head(nullptr), tail(nullptr), nodeCount(0) {
     SequenceNode* current = other.head;
 
     while (current) {
